@@ -80,12 +80,22 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+   
 }
 
 button:hover {
     background: #0056b3;
     box-shadow: 0 6px 15px rgba(0, 86, 179, 0.5);
     transform: scale(1.05);
+    animation: buttonAnimation 1s ease-in-out infinite alternate;
+}
+@keyframes buttonAnimation {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-5px);
+    }
 }
 a{
     color:#007bff;
@@ -99,27 +109,15 @@ p {
 }
 
 /* Error/success message box styling */
-.message-box {
-    padding: 10px;
-    background: rgba(255, 0, 0, 0.1);
-    color: #ff0000;
-    border: 1px solid #ff0000;
-    border-radius: 5px;
-    margin: 10px 0;
-    display: inline-block;
-    position: relative;
-    animation: fade-in 0.5s ease-in-out;
+#signupmessage{
+   color:#fff;
 }
-
 /* Close button for message box */
-.message-box .close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
-    cursor: pointer;
-    font-weight: bold;
+#loginmessage{
     color: #ff0000;
+    font-weight:bold;
 }
+    
 
 /* Animations */
 @keyframes slide-up {
