@@ -24,3 +24,24 @@ menuItems.forEach((item, index) => {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('.sidebar li');
+    const contentItems = document.querySelectorAll('.content-item');
+
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const contentId = this.id.replace('-menu', '-content');
+
+            contentItems.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            const contentToShow = document.getElementById(contentId);
+            if (contentToShow) {
+                contentToShow.classList.add('active');
+            }
+        });
+    });
+     // Set dashboard content as active by default
+     document.getElementById('dashboard-content').classList.add('active');
+});
