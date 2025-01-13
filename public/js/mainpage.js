@@ -24,6 +24,7 @@ menuItems.forEach((item, index) => {
     });
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.sidebar li');
     const contentItems = document.querySelectorAll('.content-item');
@@ -45,3 +46,4 @@ document.addEventListener('DOMContentLoaded', function() {
      // Set dashboard content as active by default
      document.getElementById('dashboard-content').classList.add('active');
 });
+
