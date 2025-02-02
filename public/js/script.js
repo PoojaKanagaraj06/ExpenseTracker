@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const signupForm = document.getElementById('signupForm');
     const loginForm = document.getElementById('loginForm');
+    const addIncomeForm = document.getElementById('add-income-form');
+    const addExpenseForm = document.getElementById('add-expense-form');
 
     // Handle Signup Form Submission
     if (signupForm) {
@@ -20,10 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('signupmessage').textContent = data.message;
 
             if (response.ok) {
-                // Store user details in localStorage
-                const users = JSON.parse(localStorage.getItem('users')) || {};
-                users[email] = name; // Map email to name
-                localStorage.setItem('users', JSON.stringify(users)); // Save updated users object
+                // Save the username in localStorage
+                localStorage.setItem('username', data.name);
                 window.location.href = 'login.html';
             }
         });
@@ -46,31 +46,32 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('loginmessage').textContent = data.message;
 
             if (response.ok) {
-                // Retrieve users from localStorage
-                const users = JSON.parse(localStorage.getItem('users')) || {};
-
-                
-
-                // Check if the email exists in the stored users
-                if (users[email]) {
-                    localStorage.setItem('username', users[email]); // Save the username
-                    window.location.href = 'mainpage.html';
-                } else {
-                    document.getElementById('loginmessage').textContent = 'No user found for this email';
-                }
+                // Save the username in localStorage
+                localStorage.setItem('username', data.name);
+                window.location.href = 'mainpage.html';
             }
         });
     }
 
     // Display Username on Main Page
-    const usernameElement = document.getElementById('username');
-    if (usernameElement) {
-        const username = localStorage.getItem('username');
-        
-        if (username) {
-            usernameElement.textContent = username;
-        } else {
-            window.location.href = 'login.html'; // Redirect if no username is found
-        }
+const usernameElements = [document.getElementById('username'), document.getElementById('greetuser')];
+const username = localStorage.getItem('username');
+
+if (usernameElements.every(element => element !== null)) {
+    if (username) {
+        usernameElements.forEach(element => {
+            element.textContent = username;
+        });
+        fetchIncomeData(); // Fetch income data after displaying the username
+        fetchExpenseData(); // Fetch expense data after displaying the username
+    } else {
+        window.location.href = 'login.html'; // Redirect if no username is found
     }
+}
+
+    
+    
+    
+
+    
 });
