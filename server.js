@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 require('dotenv').config();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -175,5 +177,55 @@ if (typeof fetchExpenseData === 'function') {
     fetchExpenseData();
 }
 
+// Chatbot route
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
+// Conversion rate from AED to INR (example rate, you may need to update it)
+const AED_TO_INR = 20;
+
+app.post('/chat', async (req, res) => {
+    try {
+        const { userMessage } = req.body;
+
+        if (!userMessage) {
+            return res.status(400).json({ error: "Message cannot be empty" });
+        }
+
+        // Check if the message is a greeting
+        const greetings = ["hello", "hi", "hey","hlo"];
+        const isGreeting = greetings.some(greeting => userMessage.toLowerCase().includes(greeting));
+
+        if (isGreeting) {
+            return res.json({ botReply: "How can I assist you?" });
+        }
+         // Check if the message is budget-related
+         const budgetKeywords = ["budget", "expense", "spending", "cost", "finance", "money","income","salary","inr"];
+         const isBudgetRelated = budgetKeywords.some(keyword => userMessage.toLowerCase().includes(keyword));
+ 
+         if (!isBudgetRelated) {
+             return res.json({ botReply: "Sorry, I can't assist with that." });
+         }
+ 
+         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+         const response = await model.generateContent(userMessage);
+         let botReply = response.response.candidates[0]?.content.parts[0]?.text;
+ 
+         if (!botReply) {
+             return res.status(500).json({ error: "Failed to get a valid response from the bot." });
+         }
+ 
+         // Convert AED amounts to INR in the bot reply
+         botReply = botReply.replace(/AED\s*([\d,]+)/g, (match, p1) => {
+             const amountInAED = parseFloat(p1.replace(/,/g, ''));
+             const amountInINR = (amountInAED * AED_TO_INR).toFixed(2);
+             return `INR ${amountInINR}`;
+         });
+         res.json({ botReply });
+        } catch (error) {
+            console.error("Error calling Gemini API:", error);
+            res.status(500).json({ error: "Failed to get response from Gemini" });
+        }
+    });
+    
 // Start Server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

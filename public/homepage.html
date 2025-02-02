@@ -263,9 +263,23 @@ document.querySelectorAll('.artbox').forEach((artbox) => {
     <p>&copy; 2025 Spend Smart | All Rights Reserved</p>
   </div>
 </footer>
-
-
-
+<!-- Chatbot Icon and Container -->
+</footer>
+<!-- Chatbot Icon and Container -->
+<div id="chatbotIcon" class="chatbot-icon">
+  <i class="fa fa-comments"></i>
+</div>
+<div id="chatbotContainer" class="chatbot-container">
+  <div class="chat-header">Expense Budget Tracker Chatbot</div>
+  <div class="chat-box" id="chatBox"></div>
+  <div class="chat-input">
+      <input type="text" id="userInput" placeholder="Ask your budget query..." />
+      <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
 
 </body>
+<script src="js/chatbot.js"></script>
 </html>
+
+

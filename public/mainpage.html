@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
     <title>Mainpage</title>
 </head>
 
@@ -237,6 +238,7 @@
         
         
     </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <script src="js/mainpage.js"></script>
@@ -244,8 +246,22 @@
     <script src="js/script.js"></script>
     <script src="js/balance.js"></script>
     <script src="js/categorychart.js"></script>
-    <script src="js/advice.js"></script>
+    <script src="js/chatbot.js"></script>
 
+    <div id="chatbotIcon" class="chatbot-icon">
+        <i class="fa fa-comments"></i>
+      </div>
+      <div id="chatbotContainer" class="chatbot-container">
+        <div class="chat-header">Expense Budget Tracker Chatbot</div>
+        <div class="chat-box" id="chatBox"></div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Ask your budget query..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+      
+      </body>
+      <script src="js/chatbot.js"></script>
 </body>
 
 </html>
