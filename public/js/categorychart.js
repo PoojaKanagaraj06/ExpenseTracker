@@ -1,9 +1,28 @@
 document.addEventListener('DOMContentLoaded', function () {
     const incomeCategoryPieChartCtx = document.getElementById('incomeCategoryPieChart').getContext('2d');
     const expenseCategoryPieChartCtx = document.getElementById('expenseCategoryPieChart').getContext('2d');
+    const adviceElement = document.getElementById('advice-text');
 
     let incomePieChartInstance = null;
     let expensePieChartInstance = null;
+
+    const colorPalette = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+    ];
+
+    const borderColorPalette = [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+    ];
 
     // Fetch data for income categories
     async function fetchIncomeData() {
@@ -47,22 +66,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 labels: categories,
                 datasets: [{
                     data: categoryData,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
+                    backgroundColor: colorPalette,
+                    borderColor: borderColorPalette,
                     borderWidth: 1
                 }]
             },
@@ -84,6 +89,27 @@ document.addEventListener('DOMContentLoaded', function () {
             chartInstance.destroy(); // Destroy the existing pie chart
         }
         chartInstance = new Chart(chartCtx, pieChartConfig); // Create a new pie chart
+
+        // Generate and display advice based on the chart data
+        const advice = generateAdvice(data);
+        adviceElement.textContent = advice;
+    }
+
+    function generateAdvice(data) {
+        // Example advice generation logic based on chart data
+        const totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
+        const highestCategory = data.reduce((max, item) => item.amount > max.amount ? item : max, data[0]);
+
+        let advice = `Your total spending is ₹${totalAmount.toFixed(2)}. `;
+        advice += `You are spending the most on ${highestCategory.category} (₹${highestCategory.amount.toFixed(2)}). `;
+
+        if (highestCategory.amount > totalAmount * 0.5) {
+            advice += "Consider reducing your spending in this category.";
+        } else {
+            advice += "Your spending seems balanced.";
+        }
+
+        return advice;
     }
 
     // Initialize the charts with example data

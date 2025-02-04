@@ -42,58 +42,58 @@
             <div id="dashboard-content" class="content-item active">
                 
                 <h2>Welcome <span id="greetuser">Username</span>,</h2>
-<div class="dashboard-container">
-    <div class="dashboard-cards">
-        <div class="dashboard-card">
-            <div class="dcard-header">
-                <p>Income</p>
-                <h3>₹<span id="dincome-amount">0</span></h3>
-            </div>
-            <div class="card-progress">
-                <div class="circular-progress" id="income-progress">
-                    <span class="progress-value" id="income-percentage">0%</span>
+                <div class="dashboard-container">
+                    <div class="dashboard-cards">
+                        <div class="dashboard-card">
+                            <div class="dcard-header">
+                                <p>Income</p>
+                                <h3>₹<span id="dincome-amount">0</span></h3>
+                            </div>
+                            <div class="card-progress">
+                                <div class="circular-progress" id="income-progress">
+                                    <span class="progress-value" id="income-percentage">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dcard-header">
+                                <p>Expenses</p>
+                                <h3>₹<span id="dexpense-amount">0</span></h3>
+                            </div>
+                            <div class="card-progress">
+                                <div class="circular-progress" id="expense-progress">
+                                    <span class="progress-value" id="expense-percentage">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dcard-header">
+                                <p>Balance</p>
+                                <h3>₹<span id="dbalance-amount">0</span></h3>
+                            </div>
+                            <div class="card-progress">
+                                <div class="circular-progress" id="balance-progress">
+                                    <span class="progress-value" id="balance-percentage">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dashboard-charts">
+                        <div class="button-container">
+                            <button class="toggle-button active" id="incomeButton">Income</button>
+                            <button class="toggle-button" id="expenseButton">Expense</button>
+                        </div>
+                        <div class="dropdown-container">
+                            <label for="timeframeSelect">Select Time Period:</label>
+                            <select id="timeframeSelect">
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <canvas id="incomeExpenseChart"></canvas>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="dashboard-card">
-            <div class="dcard-header">
-                <p>Expenses</p>
-                <h3>₹<span id="dexpense-amount">0</span></h3>
-            </div>
-            <div class="card-progress">
-                <div class="circular-progress" id="expense-progress">
-                    <span class="progress-value" id="expense-percentage">0%</span>
-                </div>
-            </div>
-        </div>
-        <div class="dashboard-card">
-            <div class="dcard-header">
-                <p>Balance</p>
-                <h3>₹<span id="dbalance-amount">0</span></h3>
-            </div>
-            <div class="card-progress">
-                <div class="circular-progress" id="balance-progress">
-                    <span class="progress-value" id="balance-percentage">0%</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="dashboard-charts">
-        <div class="button-container">
-            <button class="toggle-button active" id="incomeButton">Income</button>
-            <button class="toggle-button" id="expenseButton">Expense</button>
-        </div>
-        <div class="dropdown-container">
-            <label for="timeframeSelect">Select Time Period:</label>
-            <select id="timeframeSelect">
-                <option value="daily">Daily</option>
-                <option value="weekly">Weekly</option>
-                <option value="monthly">Monthly</option>
-            </select>
-        </div>
-        <canvas id="incomeExpenseChart"></canvas>
-    </div>
-</div>
                 
             </div>
         
@@ -174,14 +174,21 @@
                                 <div class="selects input-control">
                                     <select required name="category" id="expense-category">
                                         <option value="" disabled>Select Option</option>
-                                        <option value="education">Education</option>
-                                        <option value="groceries">Groceries</option>
-                                        <option value="health">Health</option>
-                                        <option value="subscriptions">Subscriptions</option>
-                                        <option value="takeaways">Takeaways</option>
-                                        <option value="clothing">Clothing</option>
-                                        <option value="travelling">Travelling</option>
-                                        <option value="other">Other</option>
+                            <option value="education">Education</option>
+                            <option value="groceries">Groceries</option>
+                            <option value="health">Health</option>
+                            <option value="subscriptions">Subscriptions</option>
+                            <option value="takeaways">Takeaways</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="travelling">Travelling</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="utilities">Utilities</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="rent">Rent</option>
+                            <option value="insurance">Insurance</option>
+                            <option value="savings">Savings</option>
+                            <option value="charity">Charity</option>
+                            <option value="other">Other</option>
                                     </select>
                                 </div>
                                 <button type="submit">Add Expense</button>
@@ -196,6 +203,7 @@
                         <div id="balance-container">
                             <h2>Balance</h2>
                             <div id="balance-display">
+                                <div class="digit"><span class="front">0</span><span class="back">0</span></div>
                                 <div class="digit"><span class="front">0</span><span class="back">0</span></div>
                                 <div class="digit"><span class="front">0</span><span class="back">0</span></div>
                                 <div class="digit"><span class="front">0</span><span class="back">0</span></div>
@@ -228,8 +236,8 @@
                             <canvas id="expenseCategoryPieChart"></canvas>
                         </div>
                     </div>
-                    <div id="advice-container">
-                        <h3>Advice</h3>
+                    <div id="advice-container" class="advice-box">
+                        
                         <p id="advice-text"></p>
                     </div>
                 </div>       
