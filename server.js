@@ -15,14 +15,21 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));
 
 // Session Middleware
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+    saveUninitialized: true,
+    
 }));
+app.use((req, res, next) => {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    next();
+});
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
@@ -74,6 +81,20 @@ app.post('/login', async (req, res) => {
     }
 });
 
+// Logout Route
+// Logout route
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error("Error destroying session:", err);
+            return res.status(500).send("Failed to log out");
+        }
+        // Clear the cookie
+        res.clearCookie('connect.sid'); // Assuming 'connect.sid' is your session cookie
+        // Send a response indicating successful logout
+        res.status(200).json({ message: 'Logout successful' });
+    });
+});
 // Middleware to authenticate user
 const authenticateUser = (req, res, next) => {
     if (req.session.user) {
@@ -135,6 +156,14 @@ app.post('/add-income', authenticateUser, async (req, res) => {
     }
 });
 
+app.get('/check-auth', (req, res) => {
+    if (req.session.user) {
+        res.json({ authenticated: true });
+    } else {
+        res.json({ authenticated: false });
+    }
+});
+app.use(express.static('public'));
 // Fetch Expense Route
 app.get('/expenses', authenticateUser, async (req, res) => {
     const userId = req.session.user._id; // Get user ID from session

@@ -301,4 +301,11 @@ function updateExpenseList(expenses) {
     
     fetchIncomeData();
     fetchExpenseData();
+    
+    
+    
+        
+
+    // Attach logout function to logout button
+
 });

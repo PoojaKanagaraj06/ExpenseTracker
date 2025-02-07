@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 // Save the username in localStorage
                 localStorage.setItem('username', data.name);
+                
                 window.location.href = 'login.html';
+    
             }
         });
     }
@@ -48,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 // Save the username in localStorage
                 localStorage.setItem('username', data.name);
+                document.getElementById('loginmessage').textContent = '';
+                loginForm.reset();
+                
                 window.location.href = 'mainpage.html';
             }
         });
