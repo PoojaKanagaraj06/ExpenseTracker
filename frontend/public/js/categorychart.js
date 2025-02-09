@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const incomeCategoryPieChartCtx = document.getElementById('incomeCategoryPieChart').getContext('2d');
     const expenseCategoryPieChartCtx = document.getElementById('expenseCategoryPieChart').getContext('2d');
     const adviceElement = document.getElementById('advice-text');
+    const addExpenseForm = document.getElementById('addExpenseForm');
 
     let incomePieChartInstance = null;
     let expensePieChartInstance = null;
@@ -32,10 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Failed to fetch income data');
             }
             const data = await response.json();
-            updatePieChart(data, incomeCategoryPieChartCtx, incomePieChartInstance, 'Income Category Distribution');
+            updatePieChart(data, incomeCategoryPieChartCtx, 'Income Category Distribution', 'income');
         } catch (error) {
             console.error('Error fetching income data:', error);
-            alert('Failed to load income chart data. Please try again later.');
         }
     }
 
@@ -47,18 +47,28 @@ document.addEventListener('DOMContentLoaded', function () {
                 throw new Error('Failed to fetch expense data');
             }
             const data = await response.json();
-            updatePieChart(data, expenseCategoryPieChartCtx, expensePieChartInstance, 'Expense Category Distribution');
+            updatePieChart(data, expenseCategoryPieChartCtx, 'Expense Category Distribution', 'expense');
+
+            const advice = generateAdvice(data);
+            adviceElement.textContent = advice;
         } catch (error) {
             console.error('Error fetching expense data:', error);
-            alert('Failed to load expense chart data. Please try again later.');
         }
     }
 
-    function updatePieChart(data, chartCtx, chartInstance, title) {
-        const categories = [...new Set(data.map(item => item.category))];
-        const categoryData = categories.map(category => {
-            return data.filter(item => item.category === category).reduce((sum, item) => sum + item.amount, 0);
-        });
+    function updatePieChart(data, chartCtx, title, type) {
+        let categories = [];
+        let categoryData = [];
+
+        if (data.length > 0) {
+            categories = [...new Set(data.map(item => item.category))];
+            categoryData = categories.map(category => {
+                return data.filter(item => item.category === category).reduce((sum, item) => sum + item.amount, 0);
+            });
+        } else {
+            categories = ['No Data'];
+            categoryData = [1];
+        }
 
         const pieChartConfig = {
             type: 'pie',
@@ -85,18 +95,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         };
 
-        if (chartInstance) {
-            chartInstance.destroy(); // Destroy the existing pie chart
+        if (type === 'income') {
+            if (incomePieChartInstance) {
+                incomePieChartInstance.destroy(); // Destroy the existing pie chart
+            }
+            incomePieChartInstance = new Chart(chartCtx, pieChartConfig); // Create a new pie chart
+        } else if (type === 'expense') {
+            if (expensePieChartInstance) {
+                expensePieChartInstance.destroy(); // Destroy the existing pie chart
+            }
+            expensePieChartInstance = new Chart(chartCtx, pieChartConfig); // Create a new pie chart
         }
-        chartInstance = new Chart(chartCtx, pieChartConfig); // Create a new pie chart
-
-        // Generate and display advice based on the chart data
-        const advice = generateAdvice(data);
-        adviceElement.textContent = advice;
     }
 
     function generateAdvice(data) {
-        // Example advice generation logic based on chart data
+        if (data.length === 0) {
+            return "No expense data available.";
+        }
+
         const totalAmount = data.reduce((sum, item) => sum + item.amount, 0);
         const highestCategory = data.reduce((max, item) => item.amount > max.amount ? item : max, data[0]);
 
@@ -112,7 +128,38 @@ document.addEventListener('DOMContentLoaded', function () {
         return advice;
     }
 
-    // Initialize the charts with example data
+    if (addExpenseForm) {
+        addExpenseForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const description = document.getElementById('expense-description').value;
+            const date = document.getElementById('expense-date').value;
+            const amount = parseFloat(document.getElementById('expense-amount').value.replace(/,/g, ''));
+            const category = document.getElementById('expense-category').value;
+
+            if (isNaN(amount)) {
+                alert('Please enter a valid amount');
+                return;
+            }
+
+            const response = await fetch('/add-expense', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description, date, amount, category }),
+            });
+
+            if (response.ok) {
+                // Fetch and update the expense chart
+                await fetchExpenseData();
+
+                // Reset the form
+                addExpenseForm.reset();
+            } else {
+                const errorData = await response.json();
+                alert(errorData.message);
+            }
+        });
+    }
+
     fetchIncomeData();
     fetchExpenseData();
 });

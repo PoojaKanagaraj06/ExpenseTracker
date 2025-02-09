@@ -18,12 +18,11 @@ document.addEventListener('DOMContentLoaded', function () {
             updateChart(data, type);
         } catch (error) {
             console.error('Error fetching data:', error);
-            alert('Failed to load chart data. Please try again later.');
+            
         }
     }
 
     function updateChart(data, type) {
-       
         const chartData = data.map(item => ({
             x: new Date(item.date),
             y: item.amount
@@ -33,13 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const minIntervalSize = 2000; // Set a minimum interval size
         const intervalSize = Math.min(minIntervalSize, Math.ceil(maxValue / 10)); // Calculate interval size dynamically
 
-
         const dataset = {
             label: type === 'incomes' ? 'Income' : 'Expense',
             data: chartData,
             backgroundColor: type === 'incomes' ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 99, 132, 0.6)',
             borderColor: type === 'incomes' ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
+            borderWidth: 1,
+            barThickness: 20, // Adjust this value as needed
+            maxBarThickness: 30 // Adjust this value as needed
         };
 
         const chartConfig = {

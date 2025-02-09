@@ -107,6 +107,7 @@ async function fetchExpenseData() {
         totalExpense = expenses.reduce((sum, expense) => sum + expense.amount, 0);
         updateTotalExpense();
         updateExpenseList(expenses);
+        
     } else {
         console.error('Failed to fetch expense data');
     }
@@ -272,7 +273,8 @@ function updateExpenseList(expenses) {
                 updateTotalExpense();
                 updateExpenseList(expenses);
                 addExpenseForm.reset();
-                
+                await fetchExpenseData();
+                window.location.reload();
             } else {
                 alert(data.message);
             }
@@ -298,9 +300,9 @@ function updateExpenseList(expenses) {
         sessionStorage.removeItem('activeContentId');
     }
 
-    
-    fetchIncomeData();
     fetchExpenseData();
+    fetchIncomeData();
+    
     
     
     
