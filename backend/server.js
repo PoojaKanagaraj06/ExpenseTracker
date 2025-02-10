@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 const cors = require('cors');
-
+app.use(cors({
+    origin: 'https://thespendsmart.netlify.app/', // Replace with your Netlify domain
+    credentials: true
+}));
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
