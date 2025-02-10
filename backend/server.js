@@ -25,6 +25,7 @@ app.use(cors({
     origin: 'https://thespendsmart.netlify.app/', // Replace with your Netlify domain
     credentials: true
 }));
+
 // Middleware
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
