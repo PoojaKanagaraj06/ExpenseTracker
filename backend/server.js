@@ -13,6 +13,14 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 const cors = require('cors');
+
+// Middleware
+app.use(cors({
+    origin: 'https://thespendsmart.netlify.app', // Allow requests from your frontend's origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true // Allow cookies to be sent with requests
+}));
+
 app.use(cors({
     origin: 'https://thespendsmart.netlify.app/', // Replace with your Netlify domain
     credentials: true
@@ -27,7 +35,13 @@ app.use(express.static(path.join(__dirname, '../frontend/public')));
 // Verify environment variables
 console.log('MONGO_URI:', process.env.MONGO_URI);
 console.log('SESSION_SECRET:', process.env.SESSION_SECRET);
-
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'https://thespendsmart.netlify.app');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    next();
+});
 // Session Middleware
 app.use(session({
     secret: process.env.SESSION_SECRET,
