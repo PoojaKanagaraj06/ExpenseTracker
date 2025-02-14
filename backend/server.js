@@ -21,10 +21,6 @@ app.use(cors({
     credentials: true // Allow cookies to be sent with requests
 }));
 
-app.use(cors({
-    origin: 'https://thespendsmart.netlify.app/', // Replace with your Netlify domain
-    credentials: true
-}));
 
 // Middleware
 app.use(bodyParser.json());
