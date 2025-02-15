@@ -10,6 +10,14 @@ const cors = require('cors');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Add this route in server.js
+app.get('/check-auth', (req, res) => {
+    if (req.session.user) {
+        res.json({ authenticated: true, user: req.session.user });
+    } else {
+        res.status(401).json({ authenticated: false, message: "Unauthorized" });
+    }
+});
 
 // Middleware
 app.use(cors({
