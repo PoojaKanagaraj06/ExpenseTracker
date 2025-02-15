@@ -22,9 +22,7 @@ app.get('/check-auth', (req, res) => {
 // Middleware
 
 
-app.use(cors({
-    origin: 'https://thespendsmart.netlify.app'
-}));
+
 
 // Your routes here
 
@@ -85,13 +83,7 @@ const authenticateUser = (req, res, next) => {
         res.status(401).json({ message: 'Unauthorized' });
     }
 };
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://thespendsmart.netlify.app");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization");
-    next();
-});
+
 // Signup Route
 app.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
