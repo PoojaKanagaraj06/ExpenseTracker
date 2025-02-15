@@ -6,8 +6,8 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 require('dotenv').config();
+const express = require('express');
 const cors = require('cors');
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 // Add this route in server.js
@@ -20,6 +20,17 @@ app.get('/check-auth', (req, res) => {
 });
 
 // Middleware
+
+
+app.use(cors({
+    origin: 'https://thespendsmart.netlify.app'
+}));
+
+// Your routes here
+
+app.listen(3000, () => {
+    console.log('Server running on port 3000');
+});
 app.use(cors({
     origin: 'https://thespendsmart.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -74,7 +85,13 @@ const authenticateUser = (req, res, next) => {
         res.status(401).json({ message: 'Unauthorized' });
     }
 };
-
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://thespendsmart.netlify.app");
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type, Authorization");
+    next();
+});
 // Signup Route
 app.post('/signup', async (req, res) => {
     const { name, email, password } = req.body;
